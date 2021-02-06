@@ -30,13 +30,17 @@ var LikeButton = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      if (this.state.nOfLikes > 0) {
+      if (this.state.likesAmount > 0) {
         return React.createElement(
           'button',
           { onClick: this.onClick.bind(this) },
-          'Like (liked ',
-          this.state.likesAmount,
-          ' times)'
+          'Liked ',
+          React.createElement(
+            'small',
+            null,
+            this.state.likesAmount,
+            ' times!'
+          )
         );
       }
 

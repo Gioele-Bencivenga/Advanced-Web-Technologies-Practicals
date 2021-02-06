@@ -14,10 +14,10 @@ class LikeButton extends React.Component {
   }
 
   render() {
-    if (this.state.nOfLikes > 0) {
+    if (this.state.likesAmount > 0) {
       return (
         <button onClick={this.onClick.bind(this)}>
-          Like (liked { this.state.likesAmount} times)
+          Liked <small>{this.state.likesAmount} times!</small>
         </button>
       );
     }
