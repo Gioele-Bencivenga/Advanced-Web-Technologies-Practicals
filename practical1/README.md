@@ -13,3 +13,9 @@ npx babel --watch src --out-dir . --presets react-app/prod
 ```
 
 This will automatically convert any JSX code you write inside the `practical1/src` folder to a JS file with the same name that gets placed in the `practical1` folder.
+
+## Credits
+
+### Images
+
+rock-climbing.jpg image by Анна Рыжкова, [find it here.](https://www.pexels.com/photo/person-rock-climbing-3077882/?download-size=4453x2969)

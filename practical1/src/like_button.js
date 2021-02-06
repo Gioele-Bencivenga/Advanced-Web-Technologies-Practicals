@@ -14,21 +14,32 @@ class LikeButton extends React.Component {
   }
 
   render() {
+    // default style
+    var btnStyle = {
+      backgroundColor: 'white'
+    }
+
     if (this.state.likesAmount > 0) {
+      // liked style
+      btnStyle = {
+        backgroundColor: '#b3ffb3'
+      }
+
       return (
-        <button onClick={this.onClick.bind(this)}>
+        <button 
+        onClick={this.onClick.bind(this)} style={btnStyle}>
           Liked <small>{this.state.likesAmount} times!</small>
         </button>
       );
     }
 
     return (
-      <button onClick={this.onClick.bind(this)}>
+      <button onClick={this.onClick.bind(this)} style={btnStyle}>
         Like
       </button>
     );
   }
 }
 
-let domContainer = document.querySelector('#like_button_container');
+let domContainer = document.querySelector('.like_button_container');
 ReactDOM.render(<LikeButton />, domContainer);

@@ -30,10 +30,21 @@ var LikeButton = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      // default style
+      var btnStyle = {
+        backgroundColor: 'white'
+      };
+
       if (this.state.likesAmount > 0) {
+        // liked style
+        btnStyle = {
+          backgroundColor: '#b3ffb3'
+        };
+
         return React.createElement(
           'button',
-          { onClick: this.onClick.bind(this) },
+          {
+            onClick: this.onClick.bind(this), style: btnStyle },
           'Liked ',
           React.createElement(
             'small',
@@ -46,7 +57,7 @@ var LikeButton = function (_React$Component) {
 
       return React.createElement(
         'button',
-        { onClick: this.onClick.bind(this) },
+        { onClick: this.onClick.bind(this), style: btnStyle },
         'Like'
       );
     }
@@ -55,5 +66,5 @@ var LikeButton = function (_React$Component) {
   return LikeButton;
 }(React.Component);
 
-var domContainer = document.querySelector('#like_button_container');
+var domContainer = document.querySelector('.like_button_container');
 ReactDOM.render(React.createElement(LikeButton, null), domContainer);
