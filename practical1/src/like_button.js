@@ -26,8 +26,8 @@ class LikeButton extends React.Component {
       }
 
       return (
-        <button 
-        onClick={this.onClick.bind(this)} style={btnStyle}>
+        <button
+          onClick={this.onClick.bind(this)} style={btnStyle}>
           Liked <small>{this.state.likesAmount} times!</small>
         </button>
       );
@@ -41,5 +41,7 @@ class LikeButton extends React.Component {
   }
 }
 
-let domContainer = document.querySelector('.like_button_container');
-ReactDOM.render(<LikeButton />, domContainer);
+// Find all DOM containers, and render Like buttons into them.
+document.querySelectorAll('.like_button_container').forEach(domContainer => {
+    ReactDOM.render(<LikeButton />, domContainer);
+  });

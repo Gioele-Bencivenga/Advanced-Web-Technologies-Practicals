@@ -35,22 +35,11 @@
       </div>
     </nav>
 
-    <div class="card-deck">
+    <!--<div class="card-deck">-->
+    <div class="card-deck hobby_card_container">
       <div class="card">
         <img src="images/rock-climbing.jpg" class="card-img-top"
-          alt="Image of rock climber's silhouette against the sunset.">
-        <div class="card-body">
-          <h5 class="card-title">Rock Climbing</h5>
-          <p class="card-text">An activity where you climb rocks.</p>
-          <a href="#" class="btn btn-primary">View Page</a>
-        </div>
-        <div class="card-footer">
-          <div class="like_button_container"></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="images/rock-climbing.jpg" class="card-img-top" alt="...">
+          alt="Image of rock climber's silhouette against the sunset." />
         <div class="card-body">
           <h5 class="card-title">Rock Climbing</h5>
           <p class="card-text">An activity where you climb rocks.</p>
@@ -61,6 +50,19 @@
         </div>
       </div>
     </div>
+
+    <div class="card">
+      <img src="images/rock-climbing.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Rock Climbing</h5>
+        <p class="card-text">An activity where you climb rocks.</p>
+        <a href="#" class="btn btn-primary">View Page</a>
+      </div>
+      <div class="card-footer">
+        <div class="like_button_container"></div>
+      </div>
+    </div>
+  </div>
   </div>
 
   <!-- Load React. -->
@@ -69,8 +71,8 @@
   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
 
   <!-- Load our React component. -->
+  <script src="hobby_card.js"></script>
   <script src="like_button.js"></script>
-  <script src="simple_text.js"></script>
 
   <!-- jQuery first -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

@@ -8,19 +8,19 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var LikeButton = function (_React$Component) {
-  _inherits(LikeButton, _React$Component);
+var HobbyCard = function (_React$Component) {
+  _inherits(HobbyCard, _React$Component);
 
-  function LikeButton(props) {
-    _classCallCheck(this, LikeButton);
+  function HobbyCard(props) {
+    _classCallCheck(this, HobbyCard);
 
-    var _this = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (HobbyCard.__proto__ || Object.getPrototypeOf(HobbyCard)).call(this, props));
 
     _this.state = { likesAmount: 0 };
     return _this;
   }
 
-  _createClass(LikeButton, [{
+  _createClass(HobbyCard, [{
     key: 'onClick',
     value: function onClick() {
       this.setState(function (prevState) {
@@ -63,7 +63,7 @@ var LikeButton = function (_React$Component) {
     }
   }]);
 
-  return LikeButton;
+  return HobbyCard;
 }(React.Component);
 
 // Find all DOM containers, and render Like buttons into them.
