@@ -3,21 +3,21 @@ class User
 {
     // database connection and table name
     private $conn;
-    //private $table_name = "users";
-    private $table_name = " Practical3";
+    private $table_name = "user";
 
-    // object properties
+    // properties
     public $id;
     public $username;
+    public $phone;
+    public $email;
     public $password;
-    public $created;
 
     /**
-     * Constructor with `$db` as database connection.
+     * Constructor with `$dbConn` as database connection.
      */
-    public function __construct($db)
+    public function __construct($dbConn)
     {
-        $this->conn = $db;
+        $this->conn = $dbConn;
     }
 
     /**
@@ -31,23 +31,27 @@ class User
             return false;
         }
         // query to insert record
-        $query = "INSERT INTO " . $this->table_name . " SET username=:username, password=:password, created=:created";
+        $query = "INSERT INTO " . $this->table_name .
+            " SET username=:username, phonenumber=:phone, emailaddress=:email, password=:password";
 
         // prepare query
         $stmt = $this->conn->prepare($query);
 
         // sanitize
         $this->username = htmlspecialchars(strip_tags($this->username));
+        $this->phone = htmlspecialchars(strip_tags($this->username));
+        $this->email = htmlspecialchars(strip_tags($this->username));
         $this->password = htmlspecialchars(strip_tags($this->password));
-        $this->created = htmlspecialchars(strip_tags($this->created));
+
         // bind values
         $stmt->bindParam(":username", $this->username);
+        $stmt->bindParam(":phone", $this->phone);
+        $stmt->bindParam(":email", $this->email);
         $stmt->bindParam(":password", $this->password);
-        $stmt->bindParam(":created", $this->created);
 
         // execute query
         if ($stmt->execute()) {
-            $this->id = $this->conn->lastInsertId();
+            $this->id = $this->conn->lastInsertId(); // keep track of id
             return true;
         }
 

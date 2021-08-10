@@ -2,22 +2,22 @@
 <html lang="en">
 
 <head>
-    <title>CarCo | Home</title>
-
-    <!-- get bootstrap CSS, jQuery, JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/superhero/bootstrap.min.css" integrity="sha384-HnTY+mLT0stQlOwD3wcAzSVAZbrBp141qwfR4WfTqVQKSgmcgzk+oP0ieIyrxiFO" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title>Car Company | Home</title>
+    <meta name="description" content="Home page of Car Company's website, where you can find many good cars on sale!">
+    <meta name="keywords" content="Cars, sale, buy, BMW, Toyota, best, prices">
 
     <!-- get react and babel -->
     <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
+    <!-- get bootstrap -->
+    <?php include './functions/get_bootstrap.php'; ?>
+
     <script>
-        function showCar(id) {
-            if (id == "") {
-                document.getElementById("loadingText").innerHTML = "";
+        function showCars(brand) {
+            if (brand == "") {
+                document.getElementById("loadingText").innerHTML = "<h6>No Brand Selected</h6>";
                 return;
             } else {
                 if (window.XMLHttpRequest) {
@@ -29,32 +29,36 @@
                 }
                 xmlhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
-                        document.getElementById("loadingText").innerHTML += this.responseText;
+                        document.getElementById("loadingText").innerHTML = this.responseText;
                     }
                 };
-                xmlhttp.open("GET", "getcar.php?id=" + id, true);
+                xmlhttp.open("GET", "./functions/get_car.php?brand=" + brand, true);
                 xmlhttp.send();
             }
         }
-
-        function showAllCars() {
-            var carN = 6;
-            for (let i = 1; i <= carN; i++) {
-                showCar(i);
-            }
-        }
-
-        window.onload = showAllCars();
     </script>
 </head>
 
 <body>
-    <?php include __DIR__ . '/elements/navbar.php'; ?>
+    <?php include './elements/navbar.php'; ?>
 
     <div class="container">
-        <h4>List of Cars</h4>
+        <br>
+        <form>
+            <div class="form-group">
+                <label for="car_brands">
+                    <h4>View Cars by Brand</h4>
+                </label>
+                <select name="car_brands" onchange="showCars(this.value)" class="form-control form-control-lg">
+                    <option value="">Select a Brand:</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Toyota">Toyota</option>
+                </select>
+            </div>
+        </form>
+        <br>
 
-        <div id="loadingText" class="card deck">
+        <div id="loadingText">
 
         </div>
     </div>

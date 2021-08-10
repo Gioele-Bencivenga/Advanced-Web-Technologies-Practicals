@@ -5,25 +5,16 @@ include_once 'database.php';
 // instantiate user object
 include_once 'user.php';
 
-$database = new Database();
-$db = $database->getConnection();
+$db = new Database();
+$dbConn = $db->getMySQLiConnection();
 
-$user = new User($db);
+$user = new User($dbConn);
 
-// set user property values
+// get passed in values
 $user->username = $_GET['username'];
 $user->password = $_GET['password'];
-$user->created = date('Y-m-d H:i:s');
-/*
-if(empty($user->username))
- {
- echo("No user name");
- }
- else
- {
- echo("user name:" . $user->password);
- }
-*/
+$user->dateCreated = date('Y-m-d H:i:s');
+
 // create the user
 if ($user->signup()) {
     $user_arr = array(
