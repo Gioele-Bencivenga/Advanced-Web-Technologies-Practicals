@@ -1,12 +1,14 @@
 <?php
 class User
 {
-    // database connection and table name
+    // database connection 
     private $conn;
+    // user table name
     private $table_name = "user";
+    // table columns names
+    private $col_names = array("id" => "id", "user" => "username", "pho" => "phonenumber", "ema" => "emailaddress", "pass" => "passphrase");
 
-    // properties
-    public $id;
+    // properties of the user we are creating
     public $username;
     public $phone;
     public $email;
@@ -15,9 +17,13 @@ class User
     /**
      * Constructor with `$dbConn` as database connection.
      */
-    public function __construct($dbConn)
+    public function __construct($_dbConn, $_username, $_phone, $_email, $_password)
     {
-        $this->conn = $dbConn;
+        $this->conn = $_dbConn;
+        $this->username = $_username;
+        $this->phone = $_phone;
+        $this->email = $_email;
+        $this->password = $_password;
     }
 
     /**
@@ -28,34 +34,30 @@ class User
     function signup()
     {
         if ($this->isAlreadyExist()) {
-            return false;
+            return "userAlreadyExists";
         }
         // query to insert record
         $query = "INSERT INTO " . $this->table_name .
-            " SET username=:username, phonenumber=:phone, emailaddress=:email, password=:password";
+            " (" . $this->col_names['user'] . ", " . $this->col_names['pho'] . ", " . $this->col_names['ema'] . ", " . $this->col_names['pass'] . ") 
+            VALUES (?,?,?,?)";
 
-        // prepare query
-        $stmt = $this->conn->prepare($query);
+        $stmt = mysqli_stmt_init($this->conn);
 
-        // sanitize
-        $this->username = htmlspecialchars(strip_tags($this->username));
-        $this->phone = htmlspecialchars(strip_tags($this->username));
-        $this->email = htmlspecialchars(strip_tags($this->username));
-        $this->password = htmlspecialchars(strip_tags($this->password));
+        if (!mysqli_stmt_prepare($stmt, $query)) {
+            return "stmtPrepError";
+        } else {
+            // password hashing
+            //$hash_pass = password_hash($password, PASSWORD_DEFAULT);
 
-        // bind values
-        $stmt->bindParam(":username", $this->username);
-        $stmt->bindParam(":phone", $this->phone);
-        $stmt->bindParam(":email", $this->email);
-        $stmt->bindParam(":password", $this->password);
-
-        // execute query
-        if ($stmt->execute()) {
-            $this->id = $this->conn->lastInsertId(); // keep track of id
-            return true;
+            // bind values to statement
+            mysqli_stmt_bind_param($stmt, "siss", $this->username, $this->phone, $this->email, $this->password);
+            // execute
+            mysqli_stmt_execute($stmt);
+            // success
+            return "success";
         }
 
-        return false;
+        return "strangError";
     }
 
     /**
@@ -83,13 +85,19 @@ class User
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE username='" . $this->username . "'";
         // prepare query statement
-        $stmt = $this->conn->prepare($query);
-        // execute query
-        $stmt->execute();
-        if ($stmt->rowCount() > 0) {
-            return true;
-        } else {
+        $stmt = mysqli_stmt_init($this->conn);
+        if (!mysqli_stmt_prepare($stmt, $query)) {
             return false;
+        } else {
+            // execute
+            mysqli_stmt_execute($stmt);
+            // without storing the result we can't count rows
+            mysqli_stmt_store_result($stmt);
+            if (mysqli_stmt_num_rows($stmt) > 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }

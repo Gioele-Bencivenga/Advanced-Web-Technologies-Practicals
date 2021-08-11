@@ -25,13 +25,13 @@
         <br>
         <h4>Register New User</h4>
         <br>
-        <form>
+        <form name="user_registration_form" action="./functions/register_user.php" method="POST">
             <div class="form-group row">
                 <label for="name_input" class="col-sm-2 col-form-label">
                     <h5>Username</h5>
                 </label>
                 <div class="col-sm-10">
-                    <input type="text" id="name_input" class="form-control form-control-lg" placeholder="Enter username" />
+                    <input type="text" id="name_input" name="name_input" class="form-control form-control-lg" placeholder="Enter username" />
                 </div>
             </div>
             <div class="form-group row">
@@ -39,7 +39,7 @@
                     <h5>Phone Number</h5>
                 </label>
                 <div class="col-sm-10">
-                    <input type="tel" id="phone_input" class="form-control form-control-lg" placeholder="Enter phone number" />
+                    <input type="tel" id="phone_input" name="phone_input" class="form-control form-control-lg" placeholder="Enter phone number" />
                 </div>
             </div>
             <div class="form-group row">
@@ -47,7 +47,7 @@
                     <h5>Email Address</h5>
                 </label>
                 <div class="col-sm-10">
-                    <input type="email" id="email_input" class="form-control form-control-lg" placeholder="Enter email address" />
+                    <input type="email" id="email_input" name="email_input" class="form-control form-control-lg" placeholder="Enter email address" />
                 </div>
             </div>
             <div class="form-group row">
@@ -55,7 +55,7 @@
                     <h5>Password</h5>
                 </label>
                 <div class="col-sm-10">
-                    <input type="password" id="password_input" class="form-control form-control-lg" placeholder="Enter a secure password" />
+                    <input type="password" id="password_input" name="password_input" class="form-control form-control-lg" placeholder="Enter a secure password" />
                 </div>
             </div>
 

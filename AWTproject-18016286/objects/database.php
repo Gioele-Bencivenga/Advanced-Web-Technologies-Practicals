@@ -31,15 +31,15 @@ class Database
     /**
      * Connects via `mysqli_connect` to the db using the previously defined credentials `$host`, `$db_name`, `$username`, `$password`.
      * 
-     * @return $iConn the connection 
+     * @return $iConn the mysqli connection 
      */
     public function getMySQLiConnection()
     {
-        $iConn = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);
+        $iConn = new mysqli($this->host, $this->username, $this->password, $this->db_name);
         if (!$iConn) {
             die('DB mysqli connection error: ' . mysqli_error($iConn));
         }
-        mysqli_select_db($iConn, "finalproj");
+        $iConn->select_db("finalproj");
 
         return $iConn;
     }
