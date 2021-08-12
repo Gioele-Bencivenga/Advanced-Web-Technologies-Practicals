@@ -23,6 +23,7 @@
                 <a href="./login.php">
                     <button class="btn btn-success">Log In</button>
                 </a>
+                <br>
                 <a href="./register.php">
                     <button class="btn btn-secondary">Register</button>
                 </a>

@@ -5,6 +5,9 @@
     <title>Car Company | About</title>
     <meta name="description" content="About page of Car Company's website, where you can learn more about this website.">
     <meta name="keywords" content="Cars, sale, buy, BMW, Toyota, Car, Company, about, website">
+    <meta name="author" content="18016286">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
 
     <!-- get bootstrap -->
     <?php include './functions/get_bootstrap.php'; ?>

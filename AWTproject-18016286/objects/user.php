@@ -33,8 +33,16 @@ class User
      */
     function signup()
     {
-        if ($this->isAlreadyExist()) {
+        if ($this->nameAlreadyInDb()) {
             return "userAlreadyExists";
+        } else if ($this->nameAlreadyInDb() == "stmtProblem") {
+            return "stmtPrepError";
+        }
+
+        if ($this->phoneAlreadyInDb()) {
+            return "phoneAlreadyExists";
+        } else if ($this->phoneAlreadyInDb() == "stmtProblem") {
+            return "stmtPrepError";
         }
         // query to insert record
         $query = "INSERT INTO " . $this->table_name .
@@ -46,13 +54,16 @@ class User
         if (!mysqli_stmt_prepare($stmt, $query)) {
             return "stmtPrepError";
         } else {
-            // password hashing
-            //$hash_pass = password_hash($password, PASSWORD_DEFAULT);
+            // store user password as hash so data breaches won't compromise them
+            $hashed_password = password_hash($this->password, PASSWORD_DEFAULT);
 
             // bind values to statement
-            mysqli_stmt_bind_param($stmt, "siss", $this->username, $this->phone, $this->email, $this->password);
+            mysqli_stmt_bind_param($stmt, "siss", $this->username, $this->phone, $this->email, $hashed_password);
             // execute
             mysqli_stmt_execute($stmt);
+
+            mysqli_stmt_close($stmt); // delete stored stmt
+            mysqli_close($this->conn); // close connection
             // success
             return "success";
         }
@@ -79,16 +90,45 @@ class User
     /**
      * Returns whether a user already exists or not.
      * 
-     * @return true/false whether the user already exists or not
+     * @return true/false/"stmtProblem" whether the user already exists or not, or if there was a problem with the stmt
      */
-    function isAlreadyExist()
+    function nameAlreadyInDb()
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE username='" . $this->username . "'";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE " . $this->col_names['user'] . "=?";
         // prepare query statement
         $stmt = mysqli_stmt_init($this->conn);
         if (!mysqli_stmt_prepare($stmt, $query)) {
-            return false;
+            return "stmtProblem";
         } else {
+            // bind parameters
+            mysqli_stmt_bind_param($stmt, "s", $this->username);
+            // execute
+            mysqli_stmt_execute($stmt);
+            // without storing the result we can't count rows
+            mysqli_stmt_store_result($stmt);
+            if (mysqli_stmt_num_rows($stmt) > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Returns whether a phone is already registered or not.
+     * 
+     * @return true/false"stmtProblem" whether the phone already exists or not, or if there was a problem with the stmt
+     */
+    function phoneAlreadyInDb()
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE " . $this->col_names['pho'] . "=?";
+        // prepare query statement
+        $stmt = mysqli_stmt_init($this->conn);
+        if (!mysqli_stmt_prepare($stmt, $query)) {
+            return "stmtProblem";
+        } else {
+            // bind parameters
+            mysqli_stmt_bind_param($stmt, "i", $this->phone);
             // execute
             mysqli_stmt_execute($stmt);
             // without storing the result we can't count rows

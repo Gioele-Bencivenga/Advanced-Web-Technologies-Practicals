@@ -5,6 +5,9 @@
     <title>Car Company | Home</title>
     <meta name="description" content="Home page of Car Company's website, where you can find many good cars on sale!">
     <meta name="keywords" content="Cars, sale, buy, BMW, Toyota, best, prices">
+    <meta name="author" content="18016286">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
 
     <!-- get react and babel -->
     <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
