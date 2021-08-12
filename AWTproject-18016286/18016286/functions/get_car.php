@@ -1,3 +1,15 @@
+<?php
+// start session if not started
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+// display all errors
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -20,7 +32,10 @@
         echo '<p class="card-text">' . $row['info'] . '</p>';
         echo '</div>';
         echo '<div class="card-footer">';
-        echo '<small class="text-muted">' . $row['price'] . '</small>';
+        echo '<span class="card-text">£' . $row['price'] . '  </span>';
+        if (isset($_SESSION['loggedin'])) {
+            echo '<a href="./functions/order_car.php?brand=' . $row['brand'] . '&model=' . $row['model'] . '&price=' . $row['price'] . '" class="btn btn-primary">Order This Car</a>';
+        }
         echo '</div>';
         echo '</div>';
         echo '<br>';

@@ -1,3 +1,14 @@
+<?php
+// start session if not started
+if (!isset($_SESSION)) {
+    session_start();
+}
+// display all errors
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,20 +54,20 @@
 		  
 			// name needs to be only letters
 			handleNameChanged(event) {
-                document.getElementById("submit").disabled = true;
+                document.getElementById("submit-registration").disabled = true;
 				var input = event.target.value.toString();
 				// regex testing for anyhting that is not a letter or whitespace between letters
 				if(!/[A-Za-z]+$|^$|^\s$/.test(input)) { // inputted wrong
 					// display hint
                     document.getElementById("hint_name").innerHTML = "<font color='red'><b>&#10060; Name must be only letters</b></font>";
 					// disable register button 
-					document.getElementById("submit").disabled = true;
+					document.getElementById("submit-registration").disabled = true;
 				}else{ 
                     if(input.length > 1){ // inputted right
                         // display confirmation
                         document.getElementById("hint_name").innerHTML = "<font color='pastelgreen'><b>&#10003; Name ok</b></font>";
                         // enable register button
-                        document.getElementById("submit").disabled = false;
+                        document.getElementById("submit-registration").disabled = false;
                     }else{ // too short
                         document.getElementById("hint_name").innerHTML = "<font color='white'>Name must be 2 letters minimum, no numbers or symbols</font>";
                     }
@@ -65,7 +76,7 @@
 
 			// phone number needs to be only numbers
             handlePhoneChanged(event) {
-                document.getElementById("submit").disabled = true;
+                document.getElementById("submit-registration").disabled = true;
 				var input = event.target.value.toString();
 				// regex testing for anything that is not a number, including whitespaces
 				if(!/^[0-9]*$/.test(input)) {// inputted wrong
@@ -73,7 +84,7 @@
 				}else{ 
                     if(input.length == 10){ // inputted right
                         document.getElementById("hint_phone").innerHTML = "<font color='pastelgreen'><b>&#10003; Phone ok</b></font>";
-                        document.getElementById("submit").disabled = false;
+                        document.getElementById("submit-registration").disabled = false;
                     }else{ // too short
                         document.getElementById("hint_phone").innerHTML = "<font color='white'>Phone must be 10 numbers</font>";
                     }
@@ -82,7 +93,7 @@
 
             // email needs to be something@something.something only
             handleEmailChanged(event) {
-                document.getElementById("submit").disabled = true;
+                document.getElementById("submit-registration").disabled = true;
                 var input = event.target.value.toString();
                 // regex checking email format, removing special chars
                 if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(input)) {
@@ -90,26 +101,26 @@
                 }else{ 
                     if(input.length > 1){ // inputted right
                         document.getElementById("hint_email").innerHTML = "<font color='pastelgreen'><b>&#10003; Email ok</b></font>";
-                        document.getElementById("submit").disabled = false;
+                        document.getElementById("submit-registration").disabled = false;
                     }else{ // too short (should never happen)
                         document.getElementById("hint_email").innerHTML = "<font color='white'>Email must be in the format something@something.something</font>";
                     }
                 }
             }
 
+            // password needs to be only letters
             handlePasswordChanged(event) {
-                document.getElementById("submit").disabled = true;
+                document.getElementById("submit-registration").disabled = true;
 				var input = event.target.value.toString();
 				// regex testing for anyhting that is not a letter or whitespace between letters
 				if(!/[A-Za-z]+$|^$|^\s$/.test(input)) { // inputted wrong
                     document.getElementById("hint_password").innerHTML = "<font color='red'><b>&#10060; Password must be only letters</b></font>";
-					document.getElementById("submit").disabled = true;
 				}else{ 
                     if(input.length > 1){ // inputted right
                         // display confirmation
                         document.getElementById("hint_password").innerHTML = "<font color='pastelgreen'><b>&#10003; Password ok</b></font>";
                         // enable register button
-                        document.getElementById("submit").disabled = false;
+                        document.getElementById("submit-registration").disabled = false;
                     }else{ // too short
                         document.getElementById("hint_password").innerHTML = "<font color='white'>Password must be 2 letters minimum, no numbers, symbols, or spaces</font>";
                     }
@@ -122,7 +133,7 @@
                 <br/>
                 <h4>Register New User</h4>
                 <br/>
-                <form class="form-signup" name="user_registration_form" action="./functions/register_user.php" method="POST">
+                <form name="user_registration_form" action="<?php echo htmlspecialchars('./functions/register_user.php') ?>" method="POST">
 				<div class="form-group">
 				
                 <div class="form-group row">
@@ -167,10 +178,10 @@
 
                 <div class="form-group row">
                 <div class="form-group col-3">
-                <a href="login.php" class="btn btn-success btn-block btn-large">Already Registered - <small>Log In</small></a>
+                <a href="login.php" class="btn btn-success btn-block btn-lg">Already registered</a>
 				</div>
                 <div class="form-group col">
-                <button type="submit" id="submit" name="submit" class="btn btn-info btn-block btn-large"><b>Register &#10003;</b></button>
+                <button type="submit" id="submit-registration" name="submit-registration" value="submit-registration" class="btn btn-info btn-block btn-lg"><b>Register &#10003;</b></button>
                 </div>
                 </div>
 				
@@ -179,7 +190,7 @@
 			    </form>				
                 <?php
                 if (isset($_GET['success'])) {
-                    echo "<font color='pastelgreen'><h3><b>&#10003; User Successfully Registered!</b></h3><a href='./login.php'><button class='btn btn-success btn-large'>Log In</button></a></font>";
+                    echo "<font color='pastelgreen'><h3><b>&#10003; User Successfully Registered!</b></h3><a href='./login.php'><button class='btn btn-success btn-lg'>Log In</button></a></font>";
                 } elseif (isset($_GET['error'])) {
                     switch ($_GET['error']) {
                         case "emptyfields":

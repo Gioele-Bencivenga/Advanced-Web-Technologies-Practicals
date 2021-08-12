@@ -1,3 +1,14 @@
+<?php
+// start session if not started
+if (!isset($_SESSION)) {
+    session_start();
+}
+// display all errors
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,7 +56,7 @@
 <body>
     <?php include './elements/navbar.php'; ?>
 
-    <div class="container">
+    <div id="root" class="container">
         <br>
         <form>
             <div class="form-group">

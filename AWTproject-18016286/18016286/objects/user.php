@@ -4,15 +4,16 @@ class User
     // database connection 
     private $conn;
     // user table name
-    private $table_name = "user";
+    private $table_name = "userer";
     // table columns names
-    private $col_names = array("id" => "id", "user" => "username", "pho" => "phonenumber", "ema" => "emailaddress", "pass" => "passphrase");
+    private $col_names = array("user" => "username", "pho" => "phonenumber", "ema" => "emailaddress", "pass" => "passphrase");
 
     // properties of the user we are creating
     public $username;
     public $phone;
     public $email;
     public $password;
+    private $loggedin;
 
     /**
      * Constructor with `$dbConn` as database connection.
@@ -24,6 +25,7 @@ class User
         $this->phone = $_phone;
         $this->email = $_email;
         $this->password = $_password;
+        $this->loggedin = false;
     }
 
     /**
@@ -49,16 +51,15 @@ class User
             " (" . $this->col_names['user'] . ", " . $this->col_names['pho'] . ", " . $this->col_names['ema'] . ", " . $this->col_names['pass'] . ") 
             VALUES (?,?,?,?)";
 
+        // prepare stmt
         $stmt = mysqli_stmt_init($this->conn);
-
         if (!mysqli_stmt_prepare($stmt, $query)) {
             return "stmtPrepError";
         } else {
-            // store user password as hash so data breaches won't compromise them
+            // hash password to protect the user from breaches 
             $hashed_password = password_hash($this->password, PASSWORD_DEFAULT);
-
             // bind values to statement
-            mysqli_stmt_bind_param($stmt, "siss", $this->username, $this->phone, $this->email, $hashed_password);
+            mysqli_stmt_bind_param($stmt, "ssss", $this->username, $this->phone, $this->email, $hashed_password);
             // execute
             mysqli_stmt_execute($stmt);
 
@@ -78,13 +79,46 @@ class User
      */
     function login()
     {
-        // select all query
-        $query = "SELECT `id`, `username`, `password`, `created` FROM " . $this->table_name . " WHERE username='" . $this->username . "' AND password='" . $this->password . "'";
-        // prepare query statement
-        $stmt = $this->conn->prepare($query);
-        // execute query
-        $stmt->execute();
-        return $stmt;
+        $query = "SELECT * FROM " . $this->table_name . " WHERE " . $this->col_names['pho'] . "=?";
+        // prepare stmt
+        $stmt = mysqli_stmt_init($this->conn);
+        if (!mysqli_stmt_prepare($stmt, $query)) {
+            return "stmtPrepError";
+        } else {
+            // bind values to statement
+            mysqli_stmt_bind_param($stmt, "s", $this->phone);
+            // execute
+            mysqli_stmt_execute($stmt);
+            // store result
+            $result = mysqli_stmt_get_result($stmt);
+            // get values stored in result
+            while ($row = mysqli_fetch_assoc($result)) {
+                if (password_verify($this->password, $row['passphrase'])) { // password verification
+                    $this->loggedin = true;
+                    $this->username = $row['username'];
+                    $this->email = $row['emailaddress'];
+                    // start session
+                    session_start();
+                    session_regenerate_id(); // update curr sess id
+                    $_SESSION['id'] = session_id(); // store curr sess id into id sess var
+                    $_SESSION['loggedin'] = $this->loggedin;
+                    $_SESSION['username'] = $this->username;
+                    $_SESSION['phone'] = $this->phone;
+                }
+            }
+
+            mysqli_stmt_close($stmt); // delete stored stmt
+            mysqli_close($this->conn); // close connection
+
+            if ($this->loggedin) {
+                // success
+                return "success";
+            } else {
+                return "wrongPass";
+            }
+        }
+
+        return "strangError";
     }
 
     /**
@@ -128,7 +162,7 @@ class User
             return "stmtProblem";
         } else {
             // bind parameters
-            mysqli_stmt_bind_param($stmt, "i", $this->phone);
+            mysqli_stmt_bind_param($stmt, "s", $this->phone);
             // execute
             mysqli_stmt_execute($stmt);
             // without storing the result we can't count rows

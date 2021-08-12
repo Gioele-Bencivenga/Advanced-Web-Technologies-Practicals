@@ -1,9 +1,9 @@
 <?php
-if (isset($_POST['submit'])) {
-    // get database connection
+if (isset($_POST['submit-registration'])) {
+    // include database connection file
     include_once '../objects/database.php';
 
-    // instantiate user object
+    // include user object file
     include_once '../objects/user.php';
 
     $db = new Database();
@@ -13,7 +13,7 @@ if (isset($_POST['submit'])) {
     $username = sanitize($dbConn, $_POST['name_input']);
     $phone = sanitize($dbConn, $_POST['phone_input']);
     $email = sanitize($dbConn, $_POST['email_input']);
-    $password = sanitize($dbConn, $_POST['password_input']);
+    $password = $_POST['password_input'];
 
     // check for problems with the inputted data
     if (empty($username) || empty($phone) || empty($email) || empty($password)) { // any field empty?
@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
     } elseif (!preg_match("/^[a-zA-Z]*$/", $username)) { // username with not only letters and spaces?
         header("Location: ../register.php?error=nameletters");
         exit();
-    } elseif (!preg_match("/^[0-9]*$/", $phone)) { // phone with incorrect number?
+    } elseif (!preg_match("/^[0-9]*$/", $phone)) { // phone with more than numbers?
         header("Location: ../register.php?error=phonenumbers");
         exit();
     } elseif (strlen($phone) != 10) { // phone with incorrect number of digits?
